@@ -3,11 +3,14 @@ import { Link } from 'expo-router'
 
 import Logo from '../assets/images/logo_light.png'
 
+// themed components
+import ThemedView from '../components/ThemedView'
+import ThemedLogo from '../components/ThemedLogo'
 
 const Home = () => {
   return (
-    <View style={styles.container}>
-      <Image source={Logo} style={styles.img} />
+    <ThemedView style={styles.container}>
+      <ThemedLogo style={styles.img} />
 
       <Text style={styles.title}>The Number 1</Text>
 
@@ -17,7 +20,7 @@ const Home = () => {
 
       <Link href="/about" style={styles.link}>About Page</Link>
       <Link href="/contact" style={styles.link}>Contact Page</Link>
-    </View>
+    </ThemedView>
   )
 }
 
@@ -25,7 +28,6 @@ export default Home
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#e0dfe8',
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center'
