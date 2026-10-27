@@ -1,25 +1,54 @@
-import { Image, StyleSheet, Text, View } from 'react-native'
+import { StyleSheet } from 'react-native'
 import { Link } from 'expo-router'
-
-import Logo from '../assets/images/logo_light.png'
+import { useState } from 'react';
+import { client } from '../lib/appwrite';
 
 // themed components
 import ThemedView from '../components/ThemedView'
 import ThemedLogo from '../components/ThemedLogo'
-
+import ThemedText from '../components/ThemedText'
+import ThemedButton from '../components/ThemedButton'
+import Spacer from '../components/Spacer'
+ 
 const Home = () => {
+  const [status, setStatus] = useState('Not checked yet');
+
+  const handlePing = async () => {
+    setStatus('Pinging...');
+    try {
+      await client.ping();
+      setStatus('Connected to Appwrite ✅');
+    } catch (error) {
+      setStatus(`Ping failed ❌: ${error.message}`);
+    }
+  };
+
   return (
     <ThemedView style={styles.container}>
-      <ThemedLogo style={styles.img} />
+      <ThemedLogo />
+      <Spacer />
 
-      <Text style={styles.title}>The Number 1</Text>
+      <ThemedText style={styles.title} title={true}>The Number 1</ThemedText>
 
-      <Text style={{ marginTop: 10, marginBottom: 30 }}>
+      <ThemedText style={{ marginTop: 10, marginBottom: 30 }}>
         Reading List App
-      </Text>
+      </ThemedText>
 
-      <Link href="/about" style={styles.link}>About Page</Link>
-      <Link href="/contact" style={styles.link}>Contact Page</Link>
+      <Link href="/login" style={styles.link}>
+        <ThemedText>Login</ThemedText>
+      </Link>
+      
+      <Link href="/register" style={styles.link}>
+        <ThemedText>Register</ThemedText>
+      </Link>
+
+      <Link href="/profile" style={styles.link}>
+        <ThemedText>Profile</ThemedText>
+      </Link>
+
+      <ThemedButton title="Send a ping" onPress={handlePing} />
+      <ThemedText style={styles.status}>{status}</ThemedText>
+
     </ThemedView>
   )
 }

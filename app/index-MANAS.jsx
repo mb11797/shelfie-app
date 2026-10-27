@@ -1,5 +1,4 @@
 import { StyleSheet, Text, View, Image } from 'react-native'
-import React from 'react'
 import { Link } from 'expo-router';
 import Maitri from '../assets/images/Maitri.jpeg'
 import Manas from '../assets/images/Manas.jpeg'
