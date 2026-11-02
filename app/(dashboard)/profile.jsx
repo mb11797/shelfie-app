@@ -1,22 +1,30 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet, Text } from 'react-native'
 
 import Spacer from '../../components/Spacer'
 import ThemedText from '../../components/ThemedText'
 import ThemedView from '../../components/ThemedView'
+import ThemedButton from '../../components/ThemedButton'
+import { useUser } from '../../hooks/useUser'
 
 const Profile = () => {
-  return (
-    <ThemedView style={styles.container}>
+    const {logout, user } = useUser()
 
-        <ThemedText title={true} style={styles.heading}>
-            Your Email
-        </ThemedText>
-        <Spacer />
+    return (
+        <ThemedView style={styles.container}>
 
-        <ThemedText>Time to Start Reading Some Books...</ThemedText>
-        <Spacer />
+            <ThemedText title={true} style={styles.heading}>
+                {user.email}
+            </ThemedText>
+            <Spacer />
 
-    </ThemedView>
+            <ThemedText>Time to Start Reading Some Books...</ThemedText>
+            <Spacer />
+
+            <ThemedButton onPress={logout} style={styles.button}>
+                <Text style={{ color: 'f2f2f2' }}>Logout</Text>
+            </ThemedButton>
+
+        </ThemedView>
   )
 }
 
