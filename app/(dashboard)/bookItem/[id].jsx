@@ -13,35 +13,68 @@ import ThemedCard from "../../../components/ThemedCard"
 import ThemedLoader from "../../../components/ThemedLoader"
 
 const BookDetails = () => {
-    const [book, setBook] = useState(null)
-
     const { id } = useLocalSearchParams()
-    const { fetchBookById, deleteBook } = useBooks()
+    const bookId = Array.isArray(id) ? id[0] : id
+    const { books, fetchBookById, deleteBook } = useBooks()
     const router = useRouter()
 
+    const [book, setBook] = useState(() => books?.find((b) => b.$id === bookId) || null)
+    const [loading, setLoading] = useState(!book)
+
     const handleDelete = async () => {
-        await deleteBook(id)
+        if (!bookId) return
+        await deleteBook(bookId)
         setBook(null)
         router.replace('/books')
     }
 
     useEffect(() => {
-        console.log('Executed useEffect in [id].jsx ', id)
+        if (!bookId) return
+
+        const found = books?.find((b) => b.$id === bookId)
+        if (found) {
+            setBook(found)
+            setLoading(false)
+            return
+        }
+
+        let isMounted = true
         async function loadBook() {
-            const bookData = await fetchBookById(id)
-            setBook(bookData)
+            setLoading(true)
+            const bookData = await fetchBookById(bookId)
+            if (isMounted) {
+                if (bookData) {
+                    setBook(bookData)
+                }
+                setLoading(false)
+            }
         }
 
         loadBook()
 
-        return () => setBook(null)
-    }, [id])
+        return () => {
+            isMounted = false
+        }
+    }, [bookId, books])
 
-    if(!book) {
-        console.log('book is null in [id].jsx ', id)
+    if (loading && !book) {
         return (
             <ThemedView safe={true} style={styles.container}>
                 <ThemedLoader />
+            </ThemedView>
+        )
+    }
+
+    if (!book) {
+        return (
+            <ThemedView safe={true} style={styles.container}>
+                <ThemedCard style={styles.card}>
+                    <ThemedText style={styles.title}>Book Not Found</ThemedText>
+                    <Spacer />
+                    <ThemedButton onPress={() => router.replace('/books')}>
+                        <Text style={{ color: '#fff', textAlign: 'center' }}>Back to Books</Text>
+                    </ThemedButton>
+                </ThemedCard>
             </ThemedView>
         )
     }

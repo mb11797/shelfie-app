@@ -13,6 +13,7 @@ export function BooksProvider({ children }) {
     const { user } = useUser()
 
     async function fetchBooks() {
+        console.log('inside fetchBooks')
         try {
             const response = await tablesDB.listRows({
                 databaseId: DATABASE_ID,
@@ -27,6 +28,12 @@ export function BooksProvider({ children }) {
     }
 
     async function fetchBookById(id) {
+        console.log('inside fetchBookById with id = ', id)
+        if (!id) return null
+
+        const cached = books.find((b) => b.$id === id)
+        if (cached) return cached
+
         try {
             return await tablesDB.getRow({
                 databaseId: DATABASE_ID,
@@ -35,6 +42,7 @@ export function BooksProvider({ children }) {
             })
         } catch (error) {
             console.error(error.message)
+            return null
         }
     }
 
@@ -69,6 +77,7 @@ export function BooksProvider({ children }) {
     }
 
     useEffect(() => {
+        console.log("inside useEffect in BooksProvider for dynamic updates")
         let unsubscribe
         // realtime channel changed: documents -> rows, collections -> tables
         const channel = `databases.${DATABASE_ID}.tables.${TABLE_ID}.rows`

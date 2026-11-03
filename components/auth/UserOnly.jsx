@@ -9,6 +9,7 @@ const UserOnly = ({ children }) => {
     const router = useRouter()
 
     useEffect(() => {
+        console.log("Inside useEffect in UserOnly")
         if(authChecked && user === null){
             router.replace("/login")
         }
@@ -16,6 +17,7 @@ const UserOnly = ({ children }) => {
 
     // show loader while we wait for auth to be checked, or while redirecting if user becomes null
     if(!authChecked || !user){
+        console.log("Inside if in useEffect in UserOnly")
         return (
             <ThemedLoader />
         )

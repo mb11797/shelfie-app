@@ -50,8 +50,11 @@ export default function DashboardLayout() {
                     )}}
                 />
                 <Tabs.Screen 
-                    name="books/[id]"
-                    options={{ href: null }}
+                    name="bookItem/[id]"
+                    options={{
+                        // href: null   // In Expo Router (SDK 58 / Expo 52+), setting href: null on a <Tabs.Screen> marks the route as hidden: true. When you navigate to that route, Expo Router's tab navigator (useVisibleTabsWithRedirect) treats it as unreachable and immediately redirects (router.replace) back to the initial tab (profile or books). The screen either immediately bounced back or never remained focused to render.
+                        tabBarItemStyle: { display: 'none' }
+                    }}
                 />
             </Tabs>
         </UserOnly>
